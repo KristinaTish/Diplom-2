@@ -1,5 +1,7 @@
 package userpac;
 
+import java.nio.file.attribute.UserPrincipal;
+
 public class UserLogin {
 
     private String email;
@@ -7,6 +9,14 @@ public class UserLogin {
 
     public static UserLogin from (UserReg user){
         return new UserLogin(user.getEmail(), user.getPassword());
+    }
+
+    public static UserLogin wrongPassword (UserReg user){
+        return new UserLogin(user.getEmail(), "asaprocky");
+    }
+
+    public static UserLogin wrongmail (UserReg user){
+        return new UserLogin("Asaprocky1@gmail.com", user.getPassword());
     }
 
     public UserLogin(String email, String password) {

@@ -1,6 +1,5 @@
 package userpac;
 
-import java.util.List;
 
 public class DeserealLoginResponse {
 

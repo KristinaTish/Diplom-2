@@ -6,49 +6,41 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class CreateUserTest {
-    public String authToken;
 
-    @Before
-    public void setUp(){
-        RestAssured.baseURI = UserMethods.STELLAR_URL;
-    }
-
-    @After
-    public void coverItUp(){
-        if(authToken != null && !authToken.isEmpty()){
-            Response response2 = UserMethods.deleteUser(authToken);
-            VerifyMethods.verifySuccessfulDeletion(response2);
-        }
-    }
+    @Rule
+    public UserTestRule userTestRule = new UserTestRule();
 
     @Test
     @DisplayName("Create unique user")
-    @Description("Path = api/auth/register. Test should return 200 ok and body")
+    @Description("Path = api/auth/register. Test should return 200 ok ")
     public void createUniqueCourierTest(){
-        var userr = UserReg.random();
-        Response response = UserMethods.createUser(userr);
-        authToken = UserMethods.getAccessToken(response);
-        System.out.println(authToken);
-//        String email = userr.getEmail();
-//        String name = userr.getName();
-//        VerifyMethods.verifySuccessfulUserCreation(response, email, name);
+        var userr = UserReg.random();  //генерим данные для пользователя
+        Response response = UserMethods.createUser(userr); //создаем юзера
+        String authToken = UserMethods.getAccessToken(response); //забираем токен для последующего удаления
+        userTestRule.setAuthToken(authToken);
 
-//        UserLogin user2 = UserLogin.from(user);
-//        authToken = VerifyMethods.getAccessToken(user2);
-
+        String email = userr.getEmail();  //вынимаем почту для проверок
+        String name = userr.getName(); // вынимаем имя для проверок
+        VerifyMethods.verifySuccessfulUserCreationOrLogin(response, email, name); // проверяем статус код и тело ответа на запрос создания пользователя
     }
 
-//    @Test
-//    @DisplayName("Create existing user")
-//    @Description("Path = api/auth/register. Test should return 403 Forbidden and message: User already exists")
-//    public void createExistingUser(){
-//      var user = UserReg.random();
-//      Response response = UserMethods.createUser(user);
-//
-//    }
+    @Test
+    @DisplayName("Create existing user")
+    @Description("Path = api/auth/register. Test should return 403 Forbidden and message: User already exists.")
+    public void createExistingUser(){
+      var userr = UserReg.random(); // создаем данные пользователя
+       Response response = UserMethods.createUser(userr); //создаем пользователя
+       String authToken = UserMethods.getAccessToken(response); // забираем токен
+        userTestRule.setAuthToken(authToken);
+
+       Response response2 = UserMethods.createUser(userr); //повторно создаем пользователя с теми же данными
+       VerifyMethods.verifyErrorWhileCreatingExistingUser(response2); // проверяем, что получаем ошибку
+    }
+
 }
 
 

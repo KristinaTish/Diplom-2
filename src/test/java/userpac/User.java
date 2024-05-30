@@ -1,6 +1,9 @@
 package userpac;
 
 public class User {
+
+    private String email;
+    private String name;
     public String getEmail() {
         return email;
     }
@@ -17,6 +20,4 @@ public class User {
         this.name = name;
     }
 
-    private String email;
-    private String name;
 }

@@ -45,4 +45,8 @@ public class UserReg {
         return new UserReg((RandomStringUtils.randomAlphabetic(5, 10)+"@mail.ru").toLowerCase(), "qwerty1234", "Ruslan");
     }
 
+    public static UserReg someUserData(){
+        return new UserReg("krovli-sarai2211567@mail.ru", "12345qwerty", "Oleg");
+    }
+
 }

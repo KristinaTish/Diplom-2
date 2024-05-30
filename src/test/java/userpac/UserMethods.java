@@ -12,7 +12,7 @@ public class UserMethods {
     static  final String PATH_DELETE_CHANGE_USER = "api/auth/user";
 
 
-    static Response createUser(UserReg user){
+   public static Response createUser(UserReg user){
         Response response = given()
                 .log().all()
                 .contentType(ContentType.JSON)
@@ -32,11 +32,12 @@ public class UserMethods {
         return response;
     }
 
-    static Response deleteUser (String token){
+    public static Response deleteUser (String token){
         Response response = given()
                 .log().all()
-                .contentType(ContentType.JSON)
-                .auth().oauth2(token)
+                .header("Content-type", "application/json")
+                .header("Authorization", token)
+                .when()
                 .delete(PATH_DELETE_CHANGE_USER);
         return  response;
     }
@@ -66,5 +67,26 @@ public class UserMethods {
 //                .post(PATH_LOGIN_USER)
 //                .body().as(DeserealLoginResponse.class);
   //      return response.getAccessToken();
+    }
+
+    public static Response changeProfileData (UserReg user, String token){
+      Response response = given()
+              .log().all()
+              .header("Content-type", "application/json")
+              .header("Authorization", token)
+              .body(user)
+              .when()
+              .patch(PATH_DELETE_CHANGE_USER);
+      return response;
+    }
+
+    public static Response changeProfileDataUnauthorized (UserReg user){
+        Response response = given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .body(user)
+                .when()
+                .patch(PATH_DELETE_CHANGE_USER);
+        return response;
     }
 }
