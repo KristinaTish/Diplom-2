@@ -42,31 +42,14 @@ public class UserMethods {
         return  response;
     }
 
-    static Response changeUserData (User user, String token){
-        Response response = given()
-                .log().all()
-                .contentType(ContentType.JSON)
-                .auth().oauth2(token)
-                .body(user)
-                .when()
-                .patch(PATH_DELETE_CHANGE_USER);
-        return  response;
-    }
 
     public static String getAccessToken (Response response){ //UserLogin user2
         DeserealLoginResponse r2 = response.body()
                 .as(DeserealLoginResponse.class);
-//        response.as(DeserealLoginResponse.class);
+
         String token = r2.getAccessToken();
         return token;
-//        DeserealLoginResponse response = given()
-//                .log().all()
-//                .contentType(ContentType.JSON)
-//                .body(user2)
-//                .when()
-//                .post(PATH_LOGIN_USER)
-//                .body().as(DeserealLoginResponse.class);
-  //      return response.getAccessToken();
+
     }
 
     public static Response changeProfileData (UserReg user, String token){
